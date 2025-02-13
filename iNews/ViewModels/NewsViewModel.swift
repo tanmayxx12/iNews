@@ -9,6 +9,9 @@ import Foundation
 
 @MainActor
 final class NewsViewModel: ObservableObject {
-    
+    let article: [Article] = []
+    let isLoading: Bool = false
+
+    let apiService = NewsAPIService.shared
     
 }
