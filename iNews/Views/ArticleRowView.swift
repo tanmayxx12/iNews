@@ -39,35 +39,34 @@ struct ArticleRowView: View {
             Text("\(article.descriptionText)")
                 .font(.subheadline)
                 .lineLimit(2)
+            HStack {
+                Text("\(article.captionText)")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .lineLimit(1)
+                    
+                Spacer()
+                
+                // Bookmark Button:
+                Button {
+                    // ACtion for when the button is tapped:
+                } label: {
+                    Image(systemName: "bookmark")
+                }
+                .buttonStyle(.bordered)
+                
+                // Share button:
+                Button {
+                    
+                } label: {
+                    Image(systemName: "square.and.arrow.up")
+                }
+                .buttonStyle(.bordered)
+            }
         }
         .padding([.horizontal, .bottom])
         
-        HStack {
-            Text("\(article.captionText)")
-                .font(.caption)
-                .foregroundStyle(.secondary)
-                .lineLimit(1)
-                
-            Spacer()
-            
-            // Bookmark Button:
-            Button {
-                // ACtion for when the button is tapped:
-            } label: {
-                Image(systemName: "bookmark")
-            }
-            .buttonStyle(.bordered)
-            
-            // Share button:
-            Button {
-                
-            } label: {
-                Image(systemName: "square.and.arrow.up")
-            }
-            .buttonStyle(.bordered)
-                
-        }
-        .padding(.horizontal)
+       
     }
 }
 
