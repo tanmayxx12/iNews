@@ -9,13 +9,6 @@ import Foundation
 
 @MainActor
 final class NewsViewModel: ObservableObject {
-    @Published var news: NewsResponse?
     
-    
-    init(isPreview: Bool = false) {
-        if isPreview {
-            self.news = DeveloperPreview.instance.previewData
-        }
-    }
     
 }
