@@ -13,6 +13,8 @@ struct ArticleRowView: View {
     
     var body: some View {
         VStack{
+            
+            
             AsyncImage(url: article.imageURL) { image in
                 image
                     .resizable()
@@ -27,7 +29,8 @@ struct ArticleRowView: View {
             }
             .frame(minHeight: 200, maxHeight: 320)
             .background(.gray.opacity(0.3))
-            .padding(.bottom)
+            .padding(.horizontal, 4)
+            .padding(.bottom, 4)
             
             VStack(alignment: .leading, spacing: 8) {
                 Text("\(article.title)")
@@ -43,7 +46,7 @@ struct ArticleRowView: View {
                         .font(.caption)
                         .foregroundStyle(.secondary)
                         .lineLimit(1)
-                        
+                    
                     Spacer()
                     
                     // Bookmark Button:
@@ -54,15 +57,17 @@ struct ArticleRowView: View {
                     }
                     .buttonStyle(.bordered)
                     
-                    // Share button: 
+                    // Share button:
                     ShareLink(item: article.articleURL) {
                         Image(systemName: "square.and.arrow.up")
                     }
                     .buttonStyle(.bordered)
                     
                 }
+                .padding(.bottom, 4)
             }
-            .padding([.horizontal, .bottom])
+            .padding(.horizontal, 4)
+            
         }
     }
 }

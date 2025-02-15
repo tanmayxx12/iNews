@@ -18,7 +18,7 @@ struct SearchView: View {
                 ArticleListView(articles: viewModel.articles)
             }
             .navigationTitle("Search")
-            .searchable(text: $viewModel.searchQuery, prompt: "What's happening today?")
+            .searchable(text: $viewModel.searchQuery, prompt: "Look for something")
             .onSubmit(of: .search) {
                 Task {
                     await viewModel.searchNews()

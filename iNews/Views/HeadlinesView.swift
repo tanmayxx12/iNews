@@ -12,8 +12,15 @@ struct HeadlinesView: View {
     let categories: [String] = ["general", "technology", "business", "entertainment", "health", "science", "sports"]
     
     var body: some View {
-        NavigationStack {
+        ScrollView(.vertical, showsIndicators: false) {
             VStack {
+                Text("Headlines")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal)
+                    .padding(.top)
+                
                 ScrollView(.horizontal, showsIndicators: false) {
                         HStack {
                             ForEach(categories, id: \.self) { category in
@@ -37,7 +44,11 @@ struct HeadlinesView: View {
                 if viewModel.isLoading {
                     ProgressView()
                 } else {
-                    ArticleListView(articles: viewModel.articles)
+                    LazyVStack {
+                        ForEach(viewModel.articles) { article in
+                            ArticleRowView(article: article)
+                        }
+                    }
                 }
                 
                 Spacer()
@@ -48,7 +59,6 @@ struct HeadlinesView: View {
             
         }
         .tint(.red)
-        
     }
 }
 
