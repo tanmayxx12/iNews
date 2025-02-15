@@ -8,12 +8,33 @@
 import SwiftUI
 
 struct ArticleListView: View {
+    @EnvironmentObject var viewModel: NewsViewModel
     let articles: [Article]
     @State private var selectedArticle: Article?
     
     var body: some View {
-        NavigationStack {
+            
             List {
+                    HStack {
+                        if viewModel.searchQuery.isEmpty {
+                            Text("Headlines")
+                                .font(.title)
+                                .fontWeight(.bold)
+                                .foregroundStyle(.red)
+                                .shadow(radius: 5, x: 0, y: 4)
+                                .padding(.vertical, 8)
+                           
+                        } else {
+                            Text("\(viewModel.searchQuery.capitalized)")
+                                .font(.title)
+                                .fontWeight(.bold)
+                                .foregroundStyle(.red)
+                                .shadow(radius: 5, x: 0, y: 4)
+                                .padding(.vertical, 8)
+                        }
+                        Spacer()
+                    }
+               
                 ForEach(articles) { article in
                     ArticleRowView(article: article)
                         .onTapGesture {
@@ -28,11 +49,10 @@ struct ArticleListView: View {
                 SafariView(url: $0.articleURL)
                     .ignoresSafeArea(edges: .bottom)
             }
-        }
-     
     }
 }
 
 #Preview {
     ArticleListView(articles: Article.previewData)
+        .environmentObject(NewsViewModel())
 }

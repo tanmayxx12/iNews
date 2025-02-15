@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ArticleRowView: View {
+    @EnvironmentObject var viewModel: NewsViewModel
     let article: Article
     
     var body: some View {
@@ -47,19 +48,13 @@ struct ArticleRowView: View {
                     
                     // Bookmark Button:
                     Button {
-                        // ACtion for when the button is tapped:
+                        // Action for when the button is tapped:
                     } label: {
                         Image(systemName: "bookmark")
                     }
                     .buttonStyle(.bordered)
                     
-                    // Share button:
-//                    Button {
-//                        
-//                    } label: {
-//                        Image(systemName: "square.and.arrow.up")
-//                    }
-//                    .buttonStyle(.bordered)
+                    // Share button: 
                     ShareLink(item: article.articleURL) {
                         Image(systemName: "square.and.arrow.up")
                     }
@@ -69,25 +64,13 @@ struct ArticleRowView: View {
             }
             .padding([.horizontal, .bottom])
         }
-        
-       
-        
-        
-        
-       
-    }
-}
-
-extension View {
-    func presentShareSheet(url: URL) {
-        let activityVC = UIActivityViewController(activityItems: [url], applicationActivities: nil)
-        
     }
 }
 
 #Preview {
     List {
         ArticleRowView(article: .previewData[0])
+            .environmentObject(NewsViewModel())
             .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
     }
     .listStyle(.plain)

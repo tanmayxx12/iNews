@@ -9,10 +9,12 @@ import SwiftUI
 
 @main
 struct iNewsApp: App {
+    @StateObject var viewModel = NewsViewModel()
     var body: some Scene {
         
         WindowGroup {
-            ContentView()
+            HomeView()
+                .environmentObject(viewModel)
         }
     }
 }
