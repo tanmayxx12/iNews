@@ -19,6 +19,7 @@ struct ArticleRowView: View {
                 image
                     .resizable()
                     .aspectRatio(contentMode: .fill)
+                    .scaledToFit()
                     .clipped()
             } placeholder: {
                 HStack {
