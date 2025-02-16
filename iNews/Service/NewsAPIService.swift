@@ -19,20 +19,42 @@ struct NewsAPIService {
     private let generalNewsURLString = "https://newsapi.org/v2/everything?q=headlines&from=2025-02-12&to=2025-02-12&sortBy=popularity&apiKey=a2a7e8addcc3473b8c37f2efcc5c8f5c"
     
     
+    // Function to fetch the default/general news:
     public func fetchGeneralNews() async throws -> [Article] {
         return try await fetchArticles(urlString: generalNewsURLString)
     }
     
+    // Function to fetch the searched category news (from the searchable modifier):
     public func searchNews(for query: String) async throws -> [Article] {
         let urlString = generateSearchURL(from: query)
         return try await fetchArticles(urlString: urlString)
     }
     
     
-    // Fetching news based on categories for the button in the Headlines View: 
+    // Function to fetch news based on categories of buttons in the Headlines View:
     public func fetchTopHeadlines(category: String) async throws -> [Article] {
         let urlString = "https://newsapi.org/v2/top-headlines?country=us&category=\(category)&apiKey=\(apiKey)"
         return try await fetchArticles(urlString: urlString)
+    }
+    
+    // Function to generate the search url
+    private func generateSearchURL(from query: String) -> String {
+        // Date formatted to get date in "yyyy-MM-dd" format:
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        
+        // Getting today's date:
+        let today = Date()
+        let todayString = dateFormatter.string(from: today)
+        
+        // Getting the date 7 days ago:
+        let sevenDaysAgo = Calendar.current.date(byAdding: .day, value: -7, to: today)!
+        let sevenDaysAgoString = dateFormatter.string(from: sevenDaysAgo)
+        
+        let formattedQuery = query.lowercased().replacingOccurrences(of: " ", with: "-")
+        let percentEncodedString = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? formattedQuery
+        return "https://newsapi.org/v2/everything?q=\(percentEncodedString)&from=\(sevenDaysAgoString)&to=\(todayString)&sortBy=popularity&apiKey=\(apiKey)&language=en"
+        
     }
     
     private func fetchArticles<T: Decodable>(urlString: String) async throws -> T {
@@ -73,16 +95,6 @@ struct NewsAPIService {
         }
         
     }
-    
-    
-    
-    private func generateSearchURL(from query: String) -> String {
-        let formattedQuery = query.lowercased().replacingOccurrences(of: " ", with: "-")
-        let percentEncodedString = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? formattedQuery
-        return "https://newsapi.org/v2/everything?q=\(percentEncodedString)&from=2025-02-12&to=2025-02-12&sortBy=popularity&apiKey=\(apiKey)&language=en"
-        
-    }
-    
 }
 
 
