@@ -15,13 +15,55 @@ struct SearchView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                if searchText.isEmpty {
-                    
+                if searchText.isEmpty && !viewModel.searchHistory.isEmpty {
+                    // Show recently searched section:
+                    VStack(alignment: .leading) {
+                        HStack {
+                            Text("Recent Searches")
+                                .font(.subheadline)
+                                .foregroundStyle(.gray)
+                            
+                            Spacer()
+                            
+                            Button("Clear"){
+                                viewModel.clearSearchHistory()
+                            }
+                            .font(.subheadline)
+                            .foregroundStyle(.red)
+                        }
+                        .padding(.horizontal)
+                        .padding(.top, 4)
+                        
+                        ForEach(viewModel.searchHistory, id: \.self) { searchedArticle in
+                            Button {
+                                Task {
+                                    await viewModel.searchNews(query: searchedArticle)
+                                }
+                            } label: {
+                                HStack {
+                                    Image(systemName: "clock.arrow.circlepath")
+                                        .foregroundStyle(.gray)
+                                    
+                                    Text(searchedArticle.description.capitalized)
+                                        .font(.subheadline)
+                                        .foregroundStyle(.gray)
+                                    Spacer()
+                                }
+                                .padding(.horizontal)
+                                .padding(.vertical, 4)
+                            }
+                        }
+                    }
                 }
                 
-                
-                
-                ArticleListView(articles: viewModel.articles)
+                // Search Results:
+                if viewModel.isLoading {
+                    Spacer()
+                    ProgressView()
+                    Spacer()
+                } else {
+                    ArticleListView(articles: viewModel.articles)
+                }
             }
             .navigationTitle("Search")
             .searchable(text: $searchText, prompt: "Look for something")
@@ -30,9 +72,10 @@ struct SearchView: View {
                     await viewModel.searchNews(query: searchText)
                 }
             }
-            .tint(.red)
+            
             .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
         }
+        .tint(.red)
         .onAppear {
             Task {
                 await viewModel.fetchDefaultNews()

@@ -10,7 +10,6 @@ import Foundation
 @MainActor
 final class NewsViewModel: ObservableObject {
     @Published var articles: [Article] = []
-//    @Published var searchQuery: String = ""
     @Published var isLoading: Bool = false
     @Published var selectedCategory: String = "general"
     @Published var searchHistory: [String] = []
@@ -18,20 +17,8 @@ final class NewsViewModel: ObservableObject {
     private let userDefaults = UserDefaults.standard
     private let searchHistoryKey: String = "searchHistory" // Used for UserDefaults
     let newsService = NewsAPIService.shared
-    
-    // init based on search query:
-//    init() {
-//        if searchQuery.isEmpty {
-//            Task {
-//                await fetchDefaultNews()
-//            }
-//        } else {
-//            Task {
-//                await searchNews()
-//            }
-//        }
-//    }
-    
+     
+    // Initializer comes here if any:
     
    
     func fetchDefaultNews() async {
@@ -89,7 +76,7 @@ final class NewsViewModel: ObservableObject {
         
         // Keep only last 5 searches:
         if searchHistory.count > 5 {
-            searchHistory = Array(searchHistory.prefix(5))
+            searchHistory.remove(at: 5)
         }
         
         // Save to user defaults:
