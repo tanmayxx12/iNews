@@ -10,31 +10,33 @@ import Foundation
 @MainActor
 final class NewsViewModel: ObservableObject {
     @Published var articles: [Article] = []
-    @Published var searchQuery: String = ""
+//    @Published var searchQuery: String = ""
     @Published var isLoading: Bool = false
     @Published var selectedCategory: String = "general"
+    @Published var searchHistory: [String] = []
     
-
-     let apiService = NewsAPIService.shared
+    private let userDefaults = UserDefaults.standard
+    private let searchHistoryKey: String = "searchHistory" // Used for UserDefaults
+    let newsService = NewsAPIService.shared
     
     // init based on search query:
-    init() {
-        if searchQuery.isEmpty {
-            Task {
-                await fetchDefaultNews()
-            }
-        } else {
-            Task {
-                await searchNews()
-            }
-        }
-    }
+//    init() {
+//        if searchQuery.isEmpty {
+//            Task {
+//                await fetchDefaultNews()
+//            }
+//        } else {
+//            Task {
+//                await searchNews()
+//            }
+//        }
+//    }
     
     
    
     func fetchDefaultNews() async {
         do {
-            let fetchedArticles = try await apiService.fetchGeneralNews()
+            let fetchedArticles = try await newsService.fetchGeneralNews()
             self.articles = fetchedArticles
         } catch {
             print("Error fetching default news")
@@ -47,7 +49,7 @@ final class NewsViewModel: ObservableObject {
         selectedCategory = category
         Task {
             do {
-                let fetchedArticles = try await apiService.fetchTopHeadlines(category: category)
+                let fetchedArticles = try await newsService.fetchTopHeadlines(category: category)
                 self.articles = fetchedArticles
                 self.isLoading = false
             } catch {
@@ -59,19 +61,45 @@ final class NewsViewModel: ObservableObject {
     }
     
     // Fetches news based on search query:
-    func searchNews() async {
-        guard !searchQuery.trimmingCharacters(in: .whitespaces).isEmpty else {
+    func searchNews(query: String) async {
+        guard !query.trimmingCharacters(in: .whitespaces).isEmpty else {
             await fetchDefaultNews()
             return
         }
+        
+        addToSearchHistory(query)
+        
+        isLoading = true
         do {
-            let fetchedArticles = try await apiService.searchNews(for: searchQuery)
+            let fetchedArticles = try await newsService.searchNews(for: query)
             self.articles = fetchedArticles
+            self.isLoading = false
         } catch {
             print("Error serching news: \(error.localizedDescription)")
         }
     }
     
+    
+    private func addToSearchHistory(_ query: String) {
+        // Remove if already exists to avoid duplicates:
+        searchHistory.removeAll{ $0.lowercased() == query.lowercased() }
+        
+        // Add to beginning of the array:
+        searchHistory.insert(query, at: 0)
+        
+        // Keep only last 5 searches:
+        if searchHistory.count > 5 {
+            searchHistory = Array(searchHistory.prefix(5))
+        }
+        
+        // Save to user defaults:
+        userDefaults.set(searchHistory, forKey: searchHistoryKey)
+    }
+    
+    func clearSearchHistory() {
+        searchHistory.removeAll()
+        userDefaults.removeObject(forKey: searchHistoryKey)
+    }
 }
 
 

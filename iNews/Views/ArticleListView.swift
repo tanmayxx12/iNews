@@ -15,26 +15,6 @@ struct ArticleListView: View {
     var body: some View {
             
             List {
-//                    HStack {
-//                        if viewModel.searchQuery.isEmpty {
-//                            Text("Headlines")
-//                                .font(.title)
-//                                .fontWeight(.bold)
-//                                .foregroundStyle(.red)
-//                                .shadow(radius: 5, x: 0, y: 4)
-//                                .padding(.vertical, 8)
-//                           
-//                        } else {
-//                            Text("\(viewModel.searchQuery.capitalized)")
-//                                .font(.title)
-//                                .fontWeight(.bold)
-//                                .foregroundStyle(.red)
-//                                .shadow(radius: 5, x: 0, y: 4)
-//                                .padding(.vertical, 8)
-//                        }
-//                        Spacer()
-//                    }
-               
                 ForEach(articles) { article in
                     ArticleRowView(article: article)
                         .onTapGesture {

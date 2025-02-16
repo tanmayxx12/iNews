@@ -9,19 +9,29 @@ import Foundation
 
 struct NewsAPIService {
     static let shared = NewsAPIService()
-    private init() {}
+    private let apiKey: String = "a2a7e8addcc3473b8c37f2efcc5c8f5c"
     
     public enum APIError: Error {
         case error(_ errorString: String)
     }
     
-    private let apiKey: String = "a2a7e8addcc3473b8c37f2efcc5c8f5c"
-    private let generalNewsURLString = "https://newsapi.org/v2/everything?q=headlines&from=2025-02-12&to=2025-02-12&sortBy=popularity&apiKey=a2a7e8addcc3473b8c37f2efcc5c8f5c"
-    
+    private init() {}
     
     // Function to fetch the default/general news:
     public func fetchGeneralNews() async throws -> [Article] {
-        return try await fetchArticles(urlString: generalNewsURLString)
+        // Date formatted to get date in "yyyy-MM-dd" format:
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        
+        // Getting today's date:
+        let today = Date()
+        let todayString = dateFormatter.string(from: today)
+        
+        // Getting the date 7 days ago:
+        let sevenDaysAgo = Calendar.current.date(byAdding: .day, value: -7, to: today)!
+        let sevenDaysAgoString = dateFormatter.string(from: sevenDaysAgo)
+        let urlString = "https://newsapi.org/v2/everything?q=headlines&from=\(sevenDaysAgoString)&to=\(todayString)&sortBy=popularity&apiKey=\(apiKey)"
+        return try await fetchArticles(urlString: urlString)
     }
     
     // Function to fetch the searched category news (from the searchable modifier):
@@ -31,7 +41,7 @@ struct NewsAPIService {
     }
     
     
-    // Function to fetch news based on categories of buttons in the Headlines View:
+    // Function to fetch news based on categories of buttons in the HeadlinesView:
     public func fetchTopHeadlines(category: String) async throws -> [Article] {
         let urlString = "https://newsapi.org/v2/top-headlines?country=us&category=\(category)&apiKey=\(apiKey)"
         return try await fetchArticles(urlString: urlString)
