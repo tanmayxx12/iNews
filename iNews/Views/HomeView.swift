@@ -23,7 +23,7 @@ struct HomeView: View {
             }
             
             Tab("Bookmarks", systemImage: "bookmark.fill") {
-                Text("Bookmark View.")
+                BookmarkedArticlesView(viewModel: _viewModel)
             }
             
         }

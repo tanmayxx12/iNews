@@ -13,14 +13,18 @@ final class NewsViewModel: ObservableObject {
     @Published var isLoading: Bool = false
     @Published var selectedCategory: String = "general"
     @Published var searchHistory: [String] = []
+    // Variable to show bookmarked articles:
+    @Published var bookmarkedArticles: [Article] = []
     
     private let userDefaults = UserDefaults.standard
     private let searchHistoryKey: String = "searchHistory" // Used for UserDefaults
+    private let bookmarksKey: String = "bookmarkedArticles"
     let newsService = NewsAPIService.shared
      
     // Initializer comes here if any:
     
    
+    // Function to fetch default news:
     func fetchDefaultNews() async {
         do {
             let fetchedArticles = try await newsService.fetchGeneralNews()
@@ -87,6 +91,37 @@ final class NewsViewModel: ObservableObject {
         searchHistory.removeAll()
         userDefaults.removeObject(forKey: searchHistoryKey)
     }
+    
+    // Adding functionality to bookmark an article:
+    func toggleBookmark(for article: Article) {
+        if isBookmarked(article) {
+            bookmarkedArticles.removeAll{ $0.url == article.url}
+            print("Article Removed.")
+        } else {
+            bookmarkedArticles.append(article)
+            print("Article Bookmarked")
+        }
+        saveBookmarkedArticles()
+    }
+    
+    func isBookmarked(_ article: Article) -> Bool {
+        return bookmarkedArticles.contains { $0.url == article.url }
+    }
+    
+    private func saveBookmarkedArticles() {
+        if let encoded = try? JSONEncoder().encode(bookmarkedArticles) {
+            userDefaults.set(encoded, forKey: bookmarksKey)
+        }
+    }
+    
+    private func loadBookmarkedArticles() {
+        if let data = userDefaults.data(forKey: bookmarksKey),
+           let decoded = try? JSONDecoder().decode([Article].self, from: data) {
+            self.bookmarkedArticles = decoded
+        }
+    }
+    
+    
 }
 
 

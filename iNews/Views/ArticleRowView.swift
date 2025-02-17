@@ -13,8 +13,6 @@ struct ArticleRowView: View {
     
     var body: some View {
         VStack{
-            
-            
             AsyncImage(url: article.imageURL) { image in
                 image
                     .resizable()
@@ -52,9 +50,9 @@ struct ArticleRowView: View {
                     
                     // Bookmark Button:
                     Button {
-                        // Action for when the button is tapped:
+                        viewModel.toggleBookmark(for: article)
                     } label: {
-                        Image(systemName: "bookmark")
+                        Image(systemName: viewModel.isBookmarked(article) ?  "bookmark.fill" : "bookmark")
                     }
                     .buttonStyle(.bordered)
                     

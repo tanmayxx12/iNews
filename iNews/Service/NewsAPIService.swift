@@ -137,7 +137,4 @@ struct NewsAPIService {
  "https://newsapi.org/v2/everything?q=tesla&from=2025-01-13&sortBy=publishedAt&apiKey=a2a7e8addcc3473b8c37f2efcc5c8f5c"
  without dates:
  "https://newsapi.org/v2/everything?q=tesla&sortBy=publishedAt&apiKey=a2a7e8addcc3473b8c37f2efcc5c8f5c"
- 
- 
- 
  */
