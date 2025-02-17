@@ -47,10 +47,27 @@ struct HeadlinesView: View {
                 
             }
             .navigationTitle("Headlines")
-            .ignoresSafeArea(edges: .bottom)
+//            .ignoresSafeArea(edges: .bottom)
             .onAppear {
                 Task {
                     await viewModel.fetchDefaultNews()
+                }
+            }
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    
+                    Menu {
+                        Button {
+                            viewModel.toggleSortOrder()
+                        } label: {
+                            HStack {
+                                Text(viewModel.isSortedByNewest ? "Oldest First" : "Newest First")
+                                Image(systemName: viewModel.isSortedByNewest ? "arrow.down" : "arrow.up")
+                            }
+                        }
+                    } label: {
+                        Image(systemName: "arrow.up.arrow.down")
+                    }
                 }
             }
         }

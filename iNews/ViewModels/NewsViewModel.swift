@@ -15,6 +15,7 @@ final class NewsViewModel: ObservableObject {
     @Published var searchHistory: [String] = []
     // Variable to show bookmarked articles:
     @Published var bookmarkedArticles: [Article] = []
+    @Published var isSortedByNewest: Bool = true
     
     private let userDefaults = UserDefaults.standard
     private let searchHistoryKey: String = "searchHistory" // Used for UserDefaults
@@ -24,7 +25,7 @@ final class NewsViewModel: ObservableObject {
     // Initializer comes here if any:
     
    
-    // Function to fetch default news:
+    // MARK: - Function to fetch default news:
     func fetchDefaultNews() async {
         do {
             let fetchedArticles = try await newsService.fetchGeneralNews()
@@ -34,7 +35,7 @@ final class NewsViewModel: ObservableObject {
         }
     }
     
-    // Function to fetch top headlines for various categories:
+    // MARK: - Function to fetch top headlines for various categories:
     func fetchArticles(for category: String) {
         isLoading = true
         selectedCategory = category
@@ -51,7 +52,7 @@ final class NewsViewModel: ObservableObject {
         
     }
     
-    // Fetches news based on search query:
+    // MARK: - Fetches news based on search query:
     func searchNews(query: String) async {
         guard !query.trimmingCharacters(in: .whitespaces).isEmpty else {
             await fetchDefaultNews()
@@ -71,6 +72,7 @@ final class NewsViewModel: ObservableObject {
     }
     
     
+    // MARK: - Function to add search query to the search history
     private func addToSearchHistory(_ query: String) {
         // Remove if already exists to avoid duplicates:
         searchHistory.removeAll{ $0.lowercased() == query.lowercased() }
@@ -87,12 +89,13 @@ final class NewsViewModel: ObservableObject {
         userDefaults.set(searchHistory, forKey: searchHistoryKey)
     }
     
+    // MARK: - Function to clear the search history
     func clearSearchHistory() {
         searchHistory.removeAll()
         userDefaults.removeObject(forKey: searchHistoryKey)
     }
     
-    // Adding functionality to bookmark an article:
+    // MARK: - Adding functionality to bookmark an article:
     func toggleBookmark(for article: Article) {
         if isBookmarked(article) {
             bookmarkedArticles.removeAll{ $0.url == article.url}
@@ -121,6 +124,32 @@ final class NewsViewModel: ObservableObject {
         }
     }
     
+    
+    // MARK: - Function to sort artilces based on their published dates:
+    // For general articles from the web:
+    private func sortArticles() {
+        articles.sort { article1, article2 in
+            let date1 = article1.publishedAt
+            let date2 = article2.publishedAt
+            return isSortedByNewest ? date1 > date2 : date1 < date2
+        }
+    }
+    
+    // For Bookmarked Articles:
+    private func sortBookmarkedArticles() {
+        bookmarkedArticles.sort { article1, article2 in
+            let date1 = article1.publishedAt
+            let date2 = article2.publishedAt
+            return isSortedByNewest ? date1 > date2 : date1 < date2
+        }
+    }
+    
+    // Function to toggle the sort order for both the general articles and the bookmarked articles:
+    func toggleSortOrder() {
+        isSortedByNewest.toggle()
+        sortArticles()
+        sortBookmarkedArticles()
+    }
     
 }
 

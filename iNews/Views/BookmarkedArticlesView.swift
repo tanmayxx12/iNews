@@ -33,8 +33,29 @@ struct BookmarkedArticlesView: View {
                 }
             }
             .navigationTitle("Bookmarked")
+            .toolbar {
+                if !viewModel.bookmarkedArticles.isEmpty {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        
+                        Menu {
+                            Button {
+                                viewModel.toggleSortOrder()
+                            } label: {
+                                HStack {
+                                    Text(viewModel.isSortedByNewest ? "Oldest First" : "Newest First")
+                                    Image(systemName: viewModel.isSortedByNewest ? "arrow.down" : "arrow.up")
+                                }
+                            }
+                        } label: {
+                            Image(systemName: "arrow.up.arrow.down")
+                        }
+                    }
+                }
+
+            }
            
         }
+        
         .tint(.red)
         
         

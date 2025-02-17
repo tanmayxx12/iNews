@@ -72,7 +72,23 @@ struct SearchView: View {
                     await viewModel.searchNews(query: searchText)
                 }
             }
-            
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    
+                    Menu {
+                        Button {
+                            viewModel.toggleSortOrder()
+                        } label: {
+                            HStack {
+                                Text(viewModel.isSortedByNewest ? "Oldest First" : "Newest First")
+                                Image(systemName: viewModel.isSortedByNewest ? "arrow.down" : "arrow.up")
+                            }
+                        }
+                    } label: {
+                        Image(systemName: "arrow.up.arrow.down")
+                    }
+                }
+            }
             .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
         }
         .tint(.red)
