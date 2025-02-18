@@ -82,7 +82,6 @@
 		11BDA5352D5DE6E100CE17AB /* iNews */ = {
 			isa = PBXGroup;
 			children = (
-				11BDA5452D5DF28D00CE17AB /* Extensions */,
 				11BDA53C2D5DE73500CE17AB /* Models */,
 				11BDA5422D5DF20900CE17AB /* Views */,
 				11BDA5432D5DF20C00CE17AB /* ViewModels */,
@@ -139,13 +138,6 @@
 				11BDA53A2D5DE6F900CE17AB /* news.json */,
 			);
 			path = Others;
-			sourceTree = "<group>";
-		};
-		11BDA5452D5DF28D00CE17AB /* Extensions */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

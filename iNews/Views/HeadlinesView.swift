@@ -47,7 +47,6 @@ struct HeadlinesView: View {
                 
             }
             .navigationTitle("Headlines")
-//            .ignoresSafeArea(edges: .bottom)
             .onAppear {
                 Task {
                     await viewModel.fetchDefaultNews()
