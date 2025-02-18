@@ -16,7 +16,8 @@ news articles and presents them in a clean, user-friendly interface following Ap
   - Science
   - Sports
 - **Quick Sharing**: Quick sharing functionality to share articles: 
- – Easily share news articles with others using a share link, seamlessly integrated with SwiftUI’s native sharing functionality.
+  - Easily share news articles with others using a share link, seamlessly integrated with SwiftUI’s native sharing functionality.
+    
 ### Search Functionality
 - **Article Search**: Search for specific news articles
 - **Search History**: Track and access recent searches
