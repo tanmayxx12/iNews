@@ -30,8 +30,6 @@ struct NewsAPIService {
         // Getting the date 7 days ago:
         let sevenDaysAgo = Calendar.current.date(byAdding: .day, value: -7, to: today)!
         let sevenDaysAgoString = dateFormatter.string(from: sevenDaysAgo)
-//        let urlString = "https://newsapi.org/v2/everything?q=headlines&from=\(sevenDaysAgoString)&to=\(todayString)&sortBy=popularity&apiKey=\(apiKey)"
-//        let urlString = "https://newsapi.org/v2/everything?q=headlines&from=\(sevenDaysAgoString)&to=\(todayString)&sortBy=date-published&apiKey=\(apiKey)"
         let urlString = "https://newsapi.org/v2/top-headlines?country=us&from=\(sevenDaysAgoString)&to=\(todayString)&sortBy=popularity&apiKey=\(apiKey)"
         return try await fetchArticles(urlString: urlString)
     }
@@ -45,10 +43,6 @@ struct NewsAPIService {
     
     // Function to fetch news based on categories of buttons in the HeadlinesView:
     public func fetchTopHeadlines(category: String) async throws -> [Article] {
-        // Date Formatter if the date parameter is used:
-        /*
-        
-         */
         // Date formatted to get date in "yyyy-MM-dd" format:
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
@@ -61,16 +55,7 @@ struct NewsAPIService {
         let sevenDaysAgo = Calendar.current.date(byAdding: .day, value: -7, to: today)!
         let sevenDaysAgoString = dateFormatter.string(from: sevenDaysAgo)
        
-        // Final URL:
         let urlString = "https://newsapi.org/v2/top-headlines?country=us&from=\(sevenDaysAgoString)&to=\(todayString)&category=\(category)&apiKey=\(apiKey)"
-        
-        // 1st URL
-//        let urlString = "https://newsapi.org/v2/everything?q=headlines&from=\(sevenDaysAgoString)&to=\(todayString)&category=\(category)&sortBy=popularity&apiKey=\(apiKey)"
-        // 2nd URL
-//        let urlString = "https://newsapi.org/v2/top-headlines?country=us&category=\(category)&apiKey=\(apiKey)"
-        // 3rd URL: 
-//        let urlString = "https://newsapi.org/v2/top-headlines?country=us&from=\(sevenDaysAgoString)&to=\(todayString)&category=\(category)&sortBy=popularity&apiKey=\(apiKey)"
-        
         return try await fetchArticles(urlString: urlString)
     }
     
@@ -133,41 +118,3 @@ struct NewsAPIService {
         
     }
 }
-
-
-// API url: "https://newsapi.org/v2/everything?q=tesla&from=2025-01-13&sortBy=publishedAt&apiKey=a2a7e8addcc3473b8c37f2efcc5c8f5c"
-
-// Different APIs for different responses:
-/*
- ** API that serches for anything and everything:
- "https://newsapi.org/v2/everything?q=\(searchQuery)&sortBy=popularity&apiKey=\(apiKey)"
- The search query works for any given area, eg: apple, tesla, samsung, headlines, general...... anything
- 
- ex:
- "https://newsapi.org/v2/everything?q=apple&sortBy=popularity&apiKey=a2a7e8addcc3473b8c37f2efcc5c8f5c&language=en"
- 
- 
- 1. Top Headlines in the US:
- "https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=a2a7e8addcc3473b8c37f2efcc5c8f5c"
- 
- 2. Top Headlines from TechCrunch right now
- "https://newsapi.org/v2/top-headlines?sources=techcrunch&apiKey=a2a7e8addcc3473b8c37f2efcc5c8f5c"
- 
- 3. All Apple mentioning articles:
- with sorted dates:
- "https://newsapi.org/v2/everything?q=apple&from=2025-02-12&to=2025-02-12&sortBy=popularity&apiKey=a2a7e8addcc3473b8c37f2efcc5c8f5c"
- without sorted dates:
- "https://newsapi.org/v2/everything?q=apple&sortBy=popularity&apiKey=a2a7e8addcc3473b8c37f2efcc5c8f5c"
-
- 4. All Tesla mentioning articles:
- with dates:
- "https://newsapi.org/v2/everything?q=tesla&from=2025-01-13&sortBy=publishedAt&apiKey=a2a7e8addcc3473b8c37f2efcc5c8f5c"
- without dates:
- "https://newsapi.org/v2/everything?q=tesla&sortBy=publishedAt&apiKey=a2a7e8addcc3473b8c37f2efcc5c8f5c"
- 
- https://newsapi.org/v2/everything?q=headlines&from=2025-01-17&to=2025-02-17&sortBy=publishedAt&apiKey=a2a7e8addcc3473b8c37f2efcc5c8f5c
- 
- https://newsapi.org/v2/everything?q=headlines&from=2025-01-17&to=2025-02-17&category=general&sortBy=popularity&apiKey=a2a7e8addcc3473b8c37f2efcc5c8f5c
- 
- https://newsapi.org/v2/top-headlines?country=us&from=2025-01-17&to=2025-02-17&category=general&apiKey=a2a7e8addcc3473b8c37f2efcc5c8f5c
- */
